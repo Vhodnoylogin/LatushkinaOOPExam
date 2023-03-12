@@ -1,8 +1,8 @@
-package com.mpi.latushkina.server.services;
+package com.mpi.latushkina.exam.server.services;
 
-import com.mpi.latushkina.server.models.Measurement;
-import com.mpi.latushkina.server.models.Phases;
-import com.mpi.latushkina.server.repository.DataRepository;
+import com.mpi.latushkina.exam.server.models.Measurement;
+import com.mpi.latushkina.exam.server.models.Phases;
+import com.mpi.latushkina.exam.server.repository.DataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

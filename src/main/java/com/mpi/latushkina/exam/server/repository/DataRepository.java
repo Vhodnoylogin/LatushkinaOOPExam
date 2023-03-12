@@ -1,6 +1,6 @@
-package com.mpi.latushkina.server.repository;
+package com.mpi.latushkina.exam.server.repository;
 
-import com.mpi.latushkina.server.models.Measurement;
+import com.mpi.latushkina.exam.server.models.Measurement;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;

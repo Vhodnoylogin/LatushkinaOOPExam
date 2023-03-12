@@ -1,6 +1,6 @@
-package com.mpi.latushkina.server.controllers;
+package com.mpi.latushkina.exam.server.controllers;
 
-import com.mpi.latushkina.server.services.DataService;
+import com.mpi.latushkina.exam.server.services.DataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,11 +24,6 @@ public class DataController {
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
-    }
-
-    @GetMapping("/greeting")
-    public ResponseEntity<?> greeting() {
-        return ResponseEntity.ok("GREETING");
     }
 
     @GetMapping("/findFault")

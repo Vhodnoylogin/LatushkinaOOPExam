@@ -1,7 +1,6 @@
-package com.mpi.latushkina.server.models;
+package com.mpi.latushkina.exam.server.models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -10,6 +9,8 @@ import java.util.Objects;
 @Table(name = "measurements")
 public class Measurement {
 
+        @Id
+        @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
         private LocalDateTime dateTime;
         private double phaseA;

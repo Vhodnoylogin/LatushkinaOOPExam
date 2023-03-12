@@ -1,4 +1,4 @@
-package com.mpi.latushkina.server.models;
+package com.mpi.latushkina.exam.server.models;
 
 public enum Phases {
     A("A"), B("B"), C("C");
