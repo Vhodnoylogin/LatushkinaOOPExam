@@ -19,8 +19,8 @@ public class SimpleDataRepository implements IDataRepository {
     @Override
     public List<Measurement> findMeasurements(int startIndex, int endIndex) {
         return this.repo.stream()
-//                .filter(x-> x.getId() >= startIndex)
-//                .filter(x-> x.getId() <= endIndex)
+                .filter(x -> x.getId() >= startIndex)
+                .filter(x -> x.getId() <= endIndex)
                 .collect(Collectors.toList());
     }
 }

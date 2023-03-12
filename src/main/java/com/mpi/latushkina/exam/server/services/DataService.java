@@ -78,24 +78,35 @@ public class DataService {
     }
 
     public String findFault(int startIndex, int endIndex) {
-        var dataPoints = dataRepository.findMeasurements(startIndex, endIndex);
+        try {
+            var dataPoints = this.dataRepository.findMeasurements(startIndex, endIndex);
 
-        if (dataPoints.isEmpty()) {
-            return "Find no points";
+            if (dataPoints.isEmpty()) {
+                return "Find no points";
+            }
+
+            List<Phases> phases = Arrays.asList(null, null, null);
+
+            logger.info("this.maxCurrent = " + this.maxCurrent);
+            dataPoints.stream()
+                    .peek(x -> logger.info(x.getPhaseA() > this.maxCurrent))
+                    .peek(x -> logger.info(x.getPhaseB() > this.maxCurrent))
+                    .peek(x -> logger.info(x.getPhaseC() > this.maxCurrent))
+                    .peek(x -> phases.set(0, x.getPhaseA() > this.maxCurrent ? Phases.A : phases.get(0)))
+                    .peek(x -> phases.set(1, x.getPhaseB() > this.maxCurrent ? Phases.B : phases.get(1)))
+                    .peek(x -> phases.set(2, x.getPhaseC() > this.maxCurrent ? Phases.C : phases.get(2)))
+                    .collect(Collectors.toList());
+
+            String res = phases.stream()
+                    .filter(Objects::nonNull)
+                    .map(Enum::name)
+                    .collect(Collectors.joining(" "));
+            if (res.trim().equals("")) return "No short circuit found";
+            return res;
+        } catch (Exception e) {
+            logger.debug("ADASDADASDASDA!!!!!!!!!!!");
+            logger.debug(e);
+            throw e;
         }
-
-        List<Phases> phases = Arrays.asList(null, null, null);
-        long nul = dataPoints.stream()
-                .peek(x -> phases.set(0, x.getPhaseA() > this.maxCurrent ? Phases.A : phases.get(0)))
-                .peek(x -> phases.set(1, x.getPhaseB() > this.maxCurrent ? Phases.B : phases.get(1)))
-                .peek(x -> phases.set(2, x.getPhaseC() > this.maxCurrent ? Phases.C : phases.get(2)))
-                .count();
-
-        String res = phases.stream()
-                .filter(Objects::nonNull)
-                .map(Enum::name)
-                .collect(Collectors.joining(" "));
-        if (res.trim().equals("")) return "No short circuit found";
-        return res;
     }
 }
