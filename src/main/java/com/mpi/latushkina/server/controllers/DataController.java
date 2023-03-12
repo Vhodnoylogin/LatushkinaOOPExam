@@ -26,6 +26,11 @@ public class DataController {
         }
     }
 
+    @GetMapping("/greeting")
+    public ResponseEntity<?> greeting() {
+        return ResponseEntity.ok("GREETING");
+    }
+
     @GetMapping("/findFault")
     public ResponseEntity<String> findFault(@RequestParam("startIndex") int startIndex, @RequestParam("endIndex") int endIndex) {
         String faultType = dataService.findFault(startIndex, endIndex);

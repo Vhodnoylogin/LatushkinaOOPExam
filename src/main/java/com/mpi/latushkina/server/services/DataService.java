@@ -1,6 +1,7 @@
 package com.mpi.latushkina.server.services;
 
 import com.mpi.latushkina.server.models.Measurement;
+import com.mpi.latushkina.server.models.Phases;
 import com.mpi.latushkina.server.repository.DataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -9,7 +10,10 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class DataService {
@@ -25,6 +29,7 @@ public class DataService {
     public void processFile(InputStream inputStream) {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line;
+            line = reader.readLine();
             while ((line = reader.readLine()) != null) {
                 Measurement measurement = parseMeasurement(line);
                 if (measurement != null) {
@@ -36,35 +41,44 @@ public class DataService {
         }
     }
 
+    private Measurement parseMeasurement(String line) {
+        String[] fields = line.split(",");
+        if (fields.length < 4) {
+            return null;
+        }
+        try {
+            return new Measurement(
+                    LocalDateTime.parse(fields[0]),
+                    Double.parseDouble(fields[1]),
+                    Double.parseDouble(fields[2]),
+                    Double.parseDouble(fields[3])
+            );
+        } catch (Exception e) {
+            return null;
+        }
+
+    }
+
     public void setSetPoint(double setPoint) {
         this.setPoint = setPoint;
     }
 
     public String findFault(int startIndex, int endIndex) {
-        List<Measurement> measurements = dataRepository.findMeasurements(startIndex, endIndex);
-        List<DataPoint> dataPoints = convertToDataPoints(measurements);
-        List<DataPoint> filteredDataPoints = filterDataPoints(dataPoints);
-        return detectFaultType(filteredDataPoints);
-    }
+        var dataPoints = dataRepository.findMeasurements(startIndex, endIndex);
 
-    private Measurement parseMeasurement(String line) {
-        // TODO: implement parsing of the measurement from the line
-        return null;
-    }
+        if (dataPoints.isEmpty()) {
+            return "";
+        }
 
-    private List<DataPoint> convertToDataPoints(List<Measurement> measurements) {
-        // TODO: implement conversion of measurements to data points
-        return null;
-    }
+        List<Phases> phases = Arrays.asList(null, null, null);
+        dataPoints.stream()
+                .peek(x -> phases.set(0, x.getPhaseA() > this.setPoint ? Phases.A : phases.get(0)))
+                .peek(x -> phases.set(1, x.getPhaseB() > this.setPoint ? Phases.B : phases.get(1)))
+                .peek(x -> phases.set(2, x.getPhaseC() > this.setPoint ? Phases.C : phases.get(2)))
+                .count();
 
-    private List<DataPoint> filterDataPoints(List<DataPoint> dataPoints) {
-        // TODO: implement filtering of data points based on the set point
-        return null;
+        return phases.stream()
+                .map(Enum::name)
+                .collect(Collectors.joining());
     }
-
-    private String detectFaultType(List<DataPoint> dataPoints) {
-        // TODO: implement detection of fault type based on filtered data points
-        return "";
-    }
-
 }

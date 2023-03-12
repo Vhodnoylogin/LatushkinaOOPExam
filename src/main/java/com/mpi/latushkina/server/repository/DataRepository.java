@@ -30,7 +30,7 @@ public class DataRepository /*implements JpaRepository<Measurement, Long>*/ {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
         CriteriaQuery<Measurement> query = cb.createQuery(Measurement.class);
         Root<Measurement> root = query.from(Measurement.class);
-        query.select(root).where(cb.between(root.get("index"), startIndex, endIndex));
+        query.select(root).where(cb.between(root.get("id"), startIndex, endIndex));
         TypedQuery<Measurement> typedQuery = entityManager.createQuery(query);
         return typedQuery.getResultList();
     }
