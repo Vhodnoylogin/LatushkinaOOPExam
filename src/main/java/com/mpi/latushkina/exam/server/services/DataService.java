@@ -82,26 +82,45 @@ public class DataService {
             var dataPoints = this.dataRepository.findMeasurements(startIndex, endIndex);
 
             if (dataPoints.isEmpty()) {
-                return "Find no points";
+                return "";
             }
 
             List<Phases> phases = Arrays.asList(null, null, null);
 
+//            Map<Phases,Phases> phases =new EnumMap<>(Phases.class);
+            logger.info("phases 1 = " + phases);
+
+//            dataPoints.stream()
+//                    .peek(logger::info)
+//                    .peek(x-> phases.put(
+//                            Phases.A
+//                            , phases.getOrDefault(Phases.A, x.getPhaseA() > this.maxCurrent ? Phases.A : null)
+//                    ))
+//                    .peek(x-> phases.put(
+//                            Phases.B
+//                            , phases.getOrDefault(Phases.B, x.getPhaseB() > this.maxCurrent ? Phases.B : null)
+//                    ))
+//                    .peek(x-> phases.put(
+//                            Phases.C
+//                            , phases.getOrDefault(Phases.C, x.getPhaseC() > this.maxCurrent ? Phases.C : null)
+//                    ))
+//                    .collect(Collectors.toList());
+            dataPoints.forEach(x -> {
+//                logger.info(x);
+                if (x.getPhaseA() > this.maxCurrent) phases.set(0, Phases.A);
+                if (x.getPhaseB() > this.maxCurrent) phases.set(1, Phases.B);
+                if (x.getPhaseC() > this.maxCurrent) phases.set(2, Phases.C);
+            });
             logger.info("this.maxCurrent = " + this.maxCurrent);
-            dataPoints.stream()
-                    .peek(x -> logger.info(x.getPhaseA() > this.maxCurrent))
-                    .peek(x -> logger.info(x.getPhaseB() > this.maxCurrent))
-                    .peek(x -> logger.info(x.getPhaseC() > this.maxCurrent))
-                    .peek(x -> phases.set(0, x.getPhaseA() > this.maxCurrent ? Phases.A : phases.get(0)))
-                    .peek(x -> phases.set(1, x.getPhaseB() > this.maxCurrent ? Phases.B : phases.get(1)))
-                    .peek(x -> phases.set(2, x.getPhaseC() > this.maxCurrent ? Phases.C : phases.get(2)))
-                    .collect(Collectors.toList());
+            logger.info("phases 2 = " + phases);
 
             String res = phases.stream()
+//                    .peek(logger::info)
                     .filter(Objects::nonNull)
                     .map(Enum::name)
-                    .collect(Collectors.joining(" "));
-            if (res.trim().equals("")) return "No short circuit found";
+                    .collect(Collectors.joining(" "))
+                    .trim();
+            if (res.trim().equals("")) return "";
             return res;
         } catch (Exception e) {
             logger.debug("ADASDADASDASDA!!!!!!!!!!!");

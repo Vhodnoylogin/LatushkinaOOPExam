@@ -88,8 +88,10 @@ public class Measurement {
         public String toString() {
                 return "Measurement{" +
                         "id=" + id +
-                        ", dateTime=" + milliSeconds +
-                        ", value=" + phaseA +
+//                        ", milliSeconds=" + milliSeconds +
+                        ", phaseA=" + phaseA +
+                        ", phaseB=" + phaseB +
+                        ", phaseC=" + phaseC +
                         '}';
         }
 }
