@@ -1,0 +1,9 @@
+--загрузка файла
+curl -F file=@"C:\Users\Radimir\Downloads\PhC20.csv" http://localhost:58507/data/upload
+
+
+--установка тока уставки
+http://localhost:58507/data/saveSetPoint?setPoint=0.1
+
+--получение данных
+http://localhost:58507/data/findFault?startIndex=1&endIndex=100
