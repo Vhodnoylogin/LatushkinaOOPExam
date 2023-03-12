@@ -24,8 +24,8 @@ public class DataController {
         try {
             dataService.processFile(file.getInputStream());
             final String info = "Upload file with name - %s and length %s bytes";
-//            return ResponseEntity.ok().body(String.format(info, file.getName(), file.getBytes().length));
-            return ResponseEntity.ok().body(dataService.getMeasurements());
+            return ResponseEntity.ok().body(String.format(info, file.getName(), file.getBytes().length));
+//            return ResponseEntity.ok().body(dataService.getMeasurements());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
