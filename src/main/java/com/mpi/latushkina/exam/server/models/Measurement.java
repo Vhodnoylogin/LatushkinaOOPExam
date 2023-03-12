@@ -2,26 +2,27 @@ package com.mpi.latushkina.exam.server.models;
 
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "measurements")
 public class Measurement {
 
+        protected static Long it = 1L;
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
-        private LocalDateTime dateTime;
+        private double milliSeconds;
         private double phaseA;
         private double phaseB;
         private double phaseC;
 
-        public Measurement(LocalDateTime dateTime, double phaseA, double phaseB, double phaseC) {
-                this.dateTime = dateTime;
+        public Measurement(double milliSeconds, double phaseA, double phaseB, double phaseC) {
+                this.milliSeconds = milliSeconds;
                 this.phaseA = phaseA;
                 this.phaseB = phaseB;
                 this.phaseC = phaseC;
+                this.id = it++;
         }
 
         public double getPhaseB() {
@@ -48,12 +49,12 @@ public class Measurement {
                 this.id = id;
         }
 
-        public LocalDateTime getDateTime() {
-                return dateTime;
+        public double getMilliSeconds() {
+                return milliSeconds;
         }
 
-        public void setDateTime(LocalDateTime dateTime) {
-                this.dateTime = dateTime;
+        public void setMilliSeconds(double milliSeconds) {
+                this.milliSeconds = milliSeconds;
         }
 
         public double getPhaseA() {
@@ -71,19 +72,19 @@ public class Measurement {
                 Measurement that = (Measurement) o;
                 return Double.compare(that.phaseA, phaseA) == 0 &&
                         Objects.equals(id, that.id) &&
-                        Objects.equals(dateTime, that.dateTime);
+                        Objects.equals(milliSeconds, that.milliSeconds);
         }
 
         @Override
         public int hashCode() {
-                return Objects.hash(id, dateTime, phaseA);
+                return Objects.hash(id, milliSeconds, phaseA);
         }
 
         @Override
         public String toString() {
                 return "Measurement{" +
                         "id=" + id +
-                        ", dateTime=" + dateTime +
+                        ", dateTime=" + milliSeconds +
                         ", value=" + phaseA +
                         '}';
         }

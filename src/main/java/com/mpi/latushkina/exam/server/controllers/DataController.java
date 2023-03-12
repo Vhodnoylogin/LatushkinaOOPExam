@@ -23,10 +23,9 @@ public class DataController {
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             dataService.processFile(file.getInputStream());
-            String info = "Upload file with name - %s and length %s bytes";
-            String name = file.getName();
-            int size = file.getBytes().length;
-            return ResponseEntity.ok().body(String.format(info, name, size));
+            final String info = "Upload file with name - %s and length %s bytes";
+//            return ResponseEntity.ok().body(String.format(info, file.getName(), file.getBytes().length));
+            return ResponseEntity.ok().body(dataService.getMeasurements());
         } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e);
         }
@@ -40,12 +39,12 @@ public class DataController {
     @GetMapping("/findFault")
     public ResponseEntity<String> findFault(@RequestParam("startIndex") int startIndex, @RequestParam("endIndex") int endIndex) {
         String faultType = dataService.findFault(startIndex, endIndex);
-        return ResponseEntity.ok(faultType);
+        return ResponseEntity.ok().body(faultType);
     }
 
     @GetMapping("/saveSetPoint")
-    public ResponseEntity<?> saveSetPoint(@RequestParam("setPoint") double setPoint) {
-        dataService.setSetPoint(setPoint);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<?> saveSetPoint(@RequestParam("maxCurrent") double maxCurrent) {
+        dataService.setMaxCurrent(maxCurrent);
+        return ResponseEntity.ok().body("set max current at " + dataService.getMaxCurrent());
     }
 }
