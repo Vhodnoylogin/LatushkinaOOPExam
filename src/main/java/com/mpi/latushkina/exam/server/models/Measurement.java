@@ -17,6 +17,10 @@ public class Measurement {
         private double phaseB;
         private double phaseC;
 
+        public Measurement() {
+
+        }
+
         public Measurement(double milliSeconds, double phaseA, double phaseB, double phaseC) {
                 this.milliSeconds = milliSeconds;
                 this.phaseA = phaseA;
