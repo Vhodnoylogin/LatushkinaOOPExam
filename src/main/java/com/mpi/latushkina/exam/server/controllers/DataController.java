@@ -10,12 +10,12 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 @RestController
-@RequestMapping("/data")
+@RequestMapping
 public class DataController {
     @Autowired
     private DataService dataService;
 
-    @PostMapping("/upload")
+    @PostMapping("/data/upload")
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             dataService.processFile(file.getInputStream());
@@ -27,7 +27,7 @@ public class DataController {
         }
     }
 
-    @GetMapping("/findFault")
+    @GetMapping("/data/findFault")
     public ResponseEntity<String> findFault(@RequestParam("startIndex") int startIndex, @RequestParam("endIndex") int endIndex) {
         String faultType = dataService.findFault(startIndex, endIndex);
         return ResponseEntity.ok().body(faultType);
